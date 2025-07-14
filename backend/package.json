@@ -1,0 +1,24 @@
+{
+  "name": "appsalon_menv_backend",
+  "version": "1.0.0",
+  "description": "Backend para AppSalon en MENV",
+  "license": "ISC",
+  "author": "Alberto Gonzalez",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "seed:import": "node data/seed.js --import",
+    "seed:clear": "node data/seed.js --clear"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.13"
+  }
+}
