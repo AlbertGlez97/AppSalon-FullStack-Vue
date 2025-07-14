@@ -1,17 +1,18 @@
 // express es un framework de node.js que permite crear aplicaciones web y APIs de manera sencilla
-import express from 'express'; 
+import express from "express";
 // dotenv es un paquete que permite cargar variables de entorno desde un archivo .env
-import dotenv from 'dotenv'; 
+import dotenv from "dotenv";
 // colors es un paquete que permite dar color a los mensajes en la consola
-import colors from 'colors';
+import colors from "colors";
+import cors from "cors"; // Importar cors para manejar solicitudes de diferentes orígenes
 // Importar la función de conexión a la base de datos
-import { connectDB } from './config/db.js'; 
-import servicesRoute from './routes/servicesRoute.js'; // Importar la ruta de servicios
+import { connectDB } from "./config/db.js";
+import servicesRoute from "./routes/servicesRoute.js"; // Importar la ruta de servicios
 
 // Cargar las variables de entorno desde el archivo .env
 dotenv.config();
 
-// Configurar la app 
+// Configurar la app
 const app = express();
 
 // Leer datos via body
@@ -20,31 +21,51 @@ app.use(express.json()); // Middleware para parsear el cuerpo de las solicitudes
 // Middleware para manejar errores de sintaxis JSON
 // Este middleware captura errores de sintaxis JSON y devuelve un mensaje de error adecuado
 app.use((err, req, res, next) => {
-  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
     const error = new Error("JSON malformado");
     return res.status(400).json({
       msg: error.message,
-      details: err.message
-    })
+      details: err.message,
+    });
   }
-  next()
-})
+  next();
+});
 
 // Conectar a la base de datos
 connectDB();
 
+// Habilitar CORS para permitir solicitudes desde diferentes orígenes
+const whitelist = [process.env.FRONTEND_URL]; // Lista blanca de orígenes permitidos
+
+const corsOptions = {
+  origin: function (origin, callback) {
+
+    console.log("Origen de la solicitud:", origin); // Registrar el origen de la solicitud en la consola
+
+    if (whitelist.includes(origin) || !origin) {
+      callback(null, true); // Permitir el origen si está en la lista blanca o si no hay origen (por ejemplo, solicitudes desde Postman)
+    } else {
+      callback(new Error("No permitido por CORS")); // Rechazar el origen si no está en la lista blanca
+    }
+  },
+};
+
+app.use(cors(corsOptions)); // Middleware para permitir solicitudes desde diferentes orígenes (Cross-Origin Resource Sharing)
+
 // Definir una ruta
 // Un middleware en Express.js es una función que se ejecuta durante el ciclo de vida de una solicitud HTTP.
-// Puede modificar la solicitud (req), la respuesta (res), o finalizar la solicitud. Los middlewares se usan 
+// Puede modificar la solicitud (req), la respuesta (res), o finalizar la solicitud. Los middlewares se usan
 // para tareas como autenticación, manejo de errores, parseo de datos, y definición de rutas.
 // El siguiente middleware registra el módulo 'servicesRoute' para manejar todas las solicitudes que comiencen con '/api/services'.
 // Esto permite organizar las rutas relacionadas con servicios en un archivo separado, facilitando la escalabilidad y el mantenimiento del código.
-app.use('/api/services', servicesRoute)
+app.use("/api/services", servicesRoute);
 
 // Definir el puerto
 const PORT = process.env.PORT || 4000;
 
 // Arrancar la app
 app.listen(PORT, () => {
-    console.log(colors.blue('Servidor corriendo en el puerto', colors.bold(PORT)));
+  console.log(
+    colors.blue("Servidor corriendo en el puerto", colors.bold(PORT))
+  );
 });

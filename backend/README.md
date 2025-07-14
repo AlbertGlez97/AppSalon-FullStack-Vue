@@ -20,6 +20,10 @@ Este proyecto corresponde al backend de AppSalon, desarrollado con Node.js y Exp
 - Se recomienda instalar **MongoDB Compass** para visualizar y administrar la base de datos de forma gráfica y sencilla.
 - Se utilizará [Mongoose](https://mongoosejs.com/), una biblioteca de modelado de objetos para MongoDB en Node.js. Mongoose facilita la definición de esquemas, la validación de datos y la interacción con la base de datos de manera sencilla y estructurada. Se instalo con `npm install mongoose`
 
+## Cors
+
+- Se instaló **cors** con `npm install cors` para permitir solicitudes desde diferentes orígenes (Cross-Origin Resource Sharing). Esta biblioteca se configuró en el proyecto para habilitar el acceso a la API desde aplicaciones frontend alojadas en dominios distintos, mejorando la interoperabilidad y seguridad.
+
 ## Recomendaciones adicionales
 
 - Configura variables de entorno para almacenar credenciales sensibles y la URL de conexión a la base de datos.

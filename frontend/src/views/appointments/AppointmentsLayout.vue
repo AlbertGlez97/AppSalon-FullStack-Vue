@@ -8,22 +8,17 @@
       <div class="flex gap-2 items-center">
         <p class="text-white text-right">Hola: Usuario</p>
 
-        <button
-          type="button"
-          class="bg-red-600 hover:bg-red-700 p-2 text-white uppercase text-xs font-extrabold rounded-lg"
-        >
+        <button type="button"
+          class="bg-red-600 hover:bg-red-700 p-2 text-white uppercase text-xs font-extrabold rounded-lg cursor-pointer">
           Cerrar Sesión
         </button>
       </div>
 
       <nav class="flex gap-2 items-center justify-end">
-        <button class="p-3 text-gray-200 uppercase text-xs font-black rounded-lg">Mis citas</button>
+        <button class="p-3 text-gray-200 uppercase text-xs font-black rounded-lg cursor-pointer">Mis citas</button>
 
-        <RouterLink
-          :to="{ name: 'new-appointment' }"
-          class="p-3 text-gray-200 uppercase text-xs font-black rounded-lg bg-blue-700"
-          >Nueva cita</RouterLink
-        >
+        <RouterLink :to="{ name: 'new-appointment' }"
+          class="p-3 text-gray-200 uppercase text-xs font-black rounded-lg bg-blue-700">Nueva cita</RouterLink>
       </nav>
     </div>
   </div>
