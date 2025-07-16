@@ -14,5 +14,8 @@ const route = useRoute();
        " :class="route.name === 'appointment-details' ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'">
       Cita y Resumen </RouterLink>
   </nav>
-  <RouterView />
+
+  <div class="space-y-5">
+    <RouterView />
+  </div>
 </template>

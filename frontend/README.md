@@ -7,6 +7,7 @@ Este proyecto se inició con `npm init vue@latest`, configurando las siguientes 
 - **Pinia**: Proporciona un sistema de gestión de estado centralizado y eficiente para Vue.
 - **TailwindCSS**: Framework de utilidades para estilos rápidos y personalizables en la interfaz.
 - **daisyui**: Permite agregar componentes UI pre-diseñados y personalizables sobre TailwindCSS, acelerando el desarrollo de interfaces atractivas.
+- **vue-tailwind-datepicker**: Se instaló este paquete para facilitar la selección de fechas en los formularios de la aplicación. Proporciona un componente de calendario personalizable y compatible con TailwindCSS, permitiendo a los usuarios elegir fechas de manera intuitiva y visualmente atractiva.
 
 Estas herramientas mejoran la estructura, escalabilidad y experiencia de desarrollo en el frontend.
 
