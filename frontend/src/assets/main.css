@@ -6,3 +6,41 @@
     cupcake;
 }
 @config "../../tailwind.config.js";
+
+/* En tu CSS global */
+.formkit-inner {
+  position: relative;
+}
+
+.formkit-suffix-icon,
+.formkit-prefix-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.formkit-prefix-icon {
+  left: 0.75rem; /* Ajusta el padding */
+}
+
+.formkit-suffix-icon {
+  right: 0.75rem;
+  cursor: pointer; /* Cambia el cursor al pasar sobre el ícono */
+}
+
+.formkit-suffix-icon > svg {
+  fill: rgb(180, 127, 255);
+  width: 1.5rem; /* Ajusta el tamaño del ícono */
+  height: 1.5rem;
+}
+
+.formkit-prefix-icon > svg {
+  fill: rgb(180, 127, 255);
+  width: 1.5rem; /* Ajusta el tamaño del ícono */
+  height: 1.5rem;
+}
+
+.formkit-input{
+  padding-left: 2.5rem; /* espacio para el ícono */
+  padding-right: 2.5rem;
+}

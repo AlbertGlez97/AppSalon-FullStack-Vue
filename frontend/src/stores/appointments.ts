@@ -1,9 +1,20 @@
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { defineStore } from 'pinia'
 import type { Service } from '@/interface/Service.ts'
 
 export const useAppointmentsStore = defineStore('appointments', () => {
   const services = ref<Service[]>([])
+  const date = ref<string>('')
+  const hours = ref<string[]>([])
+  const time = ref<string>('')
+
+  onMounted(() => {
+    const startHour = 10 // Hora de inicio
+    const endHour = 19 // Hora de fin
+    for (let hour = startHour; hour <= endHour; hour++) {
+      hours.value.push(hour + ':00')
+    }
+  })
 
   function onServiceSelected(service: Service) {
     if (services.value.some((selectedService) => selectedService._id === service._id)) {
@@ -18,6 +29,21 @@ export const useAppointmentsStore = defineStore('appointments', () => {
       }
 
       services.value.push(service)
+    }
+  }
+
+  function createAppointment() {
+    if (isValidReservation.value) {
+      const appointment = {
+        date: date.value,
+        time: time.value,
+        services: services.value.map((service) => service._id),
+        totalAmout: totalAmout.value,
+      }
+
+      console.log('Cita creada:', appointment);
+    } else {
+      console.warn('Por favor, completa todos los campos requeridos')
     }
   }
 
@@ -43,11 +69,22 @@ export const useAppointmentsStore = defineStore('appointments', () => {
     return services.value.length === 0
   })
 
+  const isValidReservation = computed((): boolean => {
+    return (date.value !== '' &&
+      time.value !== '' &&
+      services.value.length > 0)
+  })
+
   return {
     services,
+    date,
+    hours,
+    time,
     onServiceSelected,
+    createAppointment,
     isServiceSelected,
     totalAmout,
     noServiceSelected,
+    isValidReservation,
   }
 })

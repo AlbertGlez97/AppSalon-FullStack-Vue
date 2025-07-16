@@ -7,7 +7,8 @@ Este proyecto se inició con `npm init vue@latest`, configurando las siguientes 
 - **Pinia**: Proporciona un sistema de gestión de estado centralizado y eficiente para Vue.
 - **TailwindCSS**: Framework de utilidades para estilos rápidos y personalizables en la interfaz.
 - **daisyui**: Permite agregar componentes UI pre-diseñados y personalizables sobre TailwindCSS, acelerando el desarrollo de interfaces atractivas.
-- **vue-tailwind-datepicker**: Se instaló este paquete para facilitar la selección de fechas en los formularios de la aplicación. Proporciona un componente de calendario personalizable y compatible con TailwindCSS, permitiendo a los usuarios elegir fechas de manera intuitiva y visualmente atractiva.
+- **Vue3 Datepicker**: Se instaló [Vue3 Datepicker](https://vue3datepicker.com/props/modes-configuration/), un componente de selección de fechas flexible y personalizable para Vue 3. Permite a los usuarios elegir fechas o rangos de fechas de manera sencilla, soportando diferentes modos de selección y configuraciones para adaptarse a diversas necesidades en formularios o interfaces donde se requiera ingresar fechas.
+- **FormKit**: Se instalaron los paquetes `@formkit/vue` y `@formkit/themes` mediante `npm i @formkit/vue @formkit/themes`. FormKit es una librería para la creación de formularios en Vue, que facilita la generación de formularios complejos, validaciones y manejo de estados de manera eficiente y declarativa. Además, permite aplicar temas visuales fácilmente para personalizar la apariencia de los formularios.
 
 Estas herramientas mejoran la estructura, escalabilidad y experiencia de desarrollo en el frontend.
 

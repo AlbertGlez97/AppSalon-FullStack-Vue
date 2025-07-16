@@ -24,6 +24,18 @@ Este proyecto corresponde al backend de AppSalon, desarrollado con Node.js y Exp
 
 - Se instaló **cors** con `npm install cors` para permitir solicitudes desde diferentes orígenes (Cross-Origin Resource Sharing). Esta biblioteca se configuró en el proyecto para habilitar el acceso a la API desde aplicaciones frontend alojadas en dominios distintos, mejorando la interoperabilidad y seguridad.
 
+## bcrypt
+
+- Se instaló **bcrypt** con `npm install bcrypt`, una biblioteca utilizada para el hash y la verificación de contraseñas de forma segura. Permite almacenar contraseñas en la base de datos de manera cifrada, protegiendo la información sensible de los usuarios frente a posibles accesos no autorizados.
+
+## Mailtrap
+
+- Se utilizará [Mailtrap](https://mailtrap.io/), un servicio que permite simular el envío de correos electrónicos en entornos de desarrollo y pruebas. Mailtrap captura los correos enviados desde la aplicación sin que lleguen a destinatarios reales, facilitando la verificación del contenido y formato de los emails generados por el backend. Esto es útil para probar funcionalidades como confirmación de registro, recuperación de contraseñas y notificaciones, asegurando que los correos se envían correctamente antes de pasar a producción.
+
+## Nodemailer
+
+- Para utilizar Mailtrap es necesario instalar [nodemailer](https://nodemailer.com/) con `npm install nodemailer`. Nodemailer es una biblioteca para Node.js que permite enviar correos electrónicos de manera sencilla desde el backend. Facilita la integración con servicios de correo como Mailtrap, permitiendo configurar transportes SMTP, definir remitentes, destinatarios, asuntos y cuerpos de los mensajes. Es ampliamente utilizada para implementar funcionalidades como confirmación de cuentas, recuperación de contraseñas y notificaciones automáticas en aplicaciones web.
+
 ## Recomendaciones adicionales
 
 - Configura variables de entorno para almacenar credenciales sensibles y la URL de conexión a la base de datos.

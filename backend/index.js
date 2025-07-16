@@ -8,6 +8,7 @@ import cors from "cors"; // Importar cors para manejar solicitudes de diferentes
 // Importar la función de conexión a la base de datos
 import { connectDB } from "./config/db.js";
 import servicesRoute from "./routes/servicesRoute.js"; // Importar la ruta de servicios
+import authRoutes from "./routes/authRoutes.js"; // Importar las rutas de autenticación
 
 // Cargar las variables de entorno desde el archivo .env
 dotenv.config();
@@ -59,6 +60,8 @@ app.use(cors(corsOptions)); // Middleware para permitir solicitudes desde difere
 // El siguiente middleware registra el módulo 'servicesRoute' para manejar todas las solicitudes que comiencen con '/api/services'.
 // Esto permite organizar las rutas relacionadas con servicios en un archivo separado, facilitando la escalabilidad y el mantenimiento del código.
 app.use("/api/services", servicesRoute);
+
+app.use("/api/auth", authRoutes); // Registrar las rutas de autenticación
 
 // Definir el puerto
 const PORT = process.env.PORT || 4000;
