@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AppointmentsLayout from '../views/appointments/AppointmentsLayout.vue'
+import AuthApi from '@/api/AuthApi'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +15,15 @@ const router = createRouter({
       path: '/reservaciones',
       name: 'appointments',
       component: AppointmentsLayout,
+      meta: {
+        requiresAuth: true, // Requiere autenticación para acceder a las citas
+      },
       children: [
+        {
+          path: '',
+          name: 'my-appointments',
+          component: () => import('../views/appointments/MyAppointmentsView.vue'),
+        },
         {
           path: 'nueva',
           component: () => import('../views/appointments/NewAppointmentLayout.vue'),
@@ -57,5 +66,30 @@ const router = createRouter({
     }
   ],
 })
+
+router.beforeEach(async (to, from, next) => {
+  // Verificar si la ruta requiere autenticación
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // Verificar si el usuario tiene un token de autenticación
+    const token = localStorage.getItem('token')
+    if (!token) {
+      // Redirigir al usuario a la página de inicio de sesión si no está autenticado
+      next({ name: 'login' })
+    } else {
+      try{
+        await AuthApi.auth()
+        // Si la autenticación es exitosa, continuar a la ruta solicitada
+        next()
+      }catch (error) {
+
+        // Si la autenticación falla, redirigir al usuario a la página de inicio de sesión
+        next({ name: 'login' })
+      }
+    }
+  } else {
+    // Si la ruta no requiere autenticación, continuar normalmente
+    next()
+  }
+})  
 
 export default router

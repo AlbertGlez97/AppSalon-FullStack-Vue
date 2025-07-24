@@ -1,13 +1,39 @@
 <script setup lang="ts">
-import type { User } from '@/interface/User';
+import { inject } from 'vue'
+import { reset } from '@formkit/vue'
+import { useAuthStore } from '@/stores/auth'
+import type { User } from '@/interface/User'
+import type { Toast } from '@/interface/Toast'
+
+// Inyectamos el objeto $toast para mostrar notificaciones
+const $toast = inject<Toast>('$toast')
+
+// Importamos el store de autenticación para manejar el registro de usuarios
+const authStore = useAuthStore()
 
 // Esta función handleSubmit recibe un objeto que contiene todos los datos del usuario para el registro,
 // incluyendo una propiedad 'password_confirm' (confirmación de contraseña) y el resto de las propiedades
 // definidas en el tipo 'User'. Utiliza desestructuración para separar 'password_confirm' del resto de los datos,
 // permitiendo así validar que la contraseña y su confirmación coincidan antes de enviar los datos del usuario
 // al backend o realizar otras acciones relacionadas con el registro.
-const handleSubmit = ({ password_confirm, ...data }: { password_confirm: string } & User) => {
-  console.log('Form submitted with data:', data);
+const handleSubmit = async ({
+  password_confirm,
+  ...dataUser
+}: { password_confirm: string } & User) => {
+  try {
+    const { message, type } = await authStore.register(dataUser)
+    if ($toast) {
+      $toast.open({ message: message, type: type })
+    }
+
+    if (type === 'success') {
+      reset('register-form')
+    }
+  } catch (error) {
+    if ($toast) {
+      $toast.open({ message: error as string, type: 'error' })
+    }
+  }
 }
 
 const handleIconClick = (node: any, e: Event) => {
@@ -20,7 +46,13 @@ const handleIconClick = (node: any, e: Event) => {
   <h1 class="text-6xl font-extrabold text-white text-center mt-10">Crear una cuenta</h1>
   <p class="text-2xl text-white text-center my-5">Crear una cuenta AppSalón</p>
 
-  <FormKit type="form" :actions="false" incomplete-message="No se pudo enviar, revisa los campos" @submit="handleSubmit">
+  <FormKit
+    id="register-form"
+    type="form"
+    :actions="false"
+    incomplete-message="No se pudo enviar, revisa los campos"
+    @submit="handleSubmit"
+  >
     <FormKit
       type="text"
       label="Nombre"

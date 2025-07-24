@@ -36,12 +36,12 @@ app.use((err, req, res, next) => {
 connectDB();
 
 // Habilitar CORS para permitir solicitudes desde diferentes orígenes
-const whitelist = [process.env.FRONTEND_URL]; // Lista blanca de orígenes permitidos
+const whitelist = [process.env.FRONTEND_URL, process.env.FRONTEND_URL_JWT]; // Lista blanca de orígenes permitidos
 
 const corsOptions = {
   origin: function (origin, callback) {
 
-    console.log("Origen de la solicitud:", origin); // Registrar el origen de la solicitud en la consola
+    console.log("Origen de la solicitud:", origin); // Registrar el origen de la solicitud
 
     if (whitelist.includes(origin) || !origin) {
       callback(null, true); // Permitir el origen si está en la lista blanca o si no hay origen (por ejemplo, solicitudes desde Postman)

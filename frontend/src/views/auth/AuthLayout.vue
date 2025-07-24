@@ -7,8 +7,6 @@ const authRoutes = [
 
 <template>
   <div class="mx-auto lg:w-3/5 mt-20">
-    <h1>Desde AuthLayout</h1>
-
     <RouterView />
 
     <nav

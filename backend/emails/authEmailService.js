@@ -1,12 +1,11 @@
 import { createTransporter } from "../config/nodemailer.js";
 
 export async function sendEmailVerification( { name, email, token } ) {
-  console.log("Sending email...");
   const transporter = createTransporter(
-    "sandbox.smtp.mailtrap.io",
-    2525,
-    "236c77c9f7b650",
-    "1d81287e35eacd"
+    process.env.EMAIL_HOST,
+    process.env.EMAIL_PORT,
+    process.env.EMAIL_USER,
+    process.env.EMAIL_PASS
   );
 
   // Enviar el correo electrónico
@@ -25,7 +24,7 @@ export async function sendEmailVerification( { name, email, token } ) {
           <p style="font-size: 16px; color: #333;">Hola <strong>${name}</strong>,</p>
           <p style="font-size: 16px; color: #333;">Gracias por registrarte en <strong>AppSalon</strong>. Para finalizar tu registro, por favor confirma tu cuenta haciendo clic en el siguiente botón:</p>
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:4000/api/auth/verify/${token}" 
+            <a href="${process.env.FRONTEND_URL}/auth/confirmar-cuenta/${token}" 
                style="background-color: #4F46E5; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block;">
               Confirmar cuenta
             </a>

@@ -36,6 +36,12 @@ Este proyecto corresponde al backend de AppSalon, desarrollado con Node.js y Exp
 
 - Para utilizar Mailtrap es necesario instalar [nodemailer](https://nodemailer.com/) con `npm install nodemailer`. Nodemailer es una biblioteca para Node.js que permite enviar correos electrónicos de manera sencilla desde el backend. Facilita la integración con servicios de correo como Mailtrap, permitiendo configurar transportes SMTP, definir remitentes, destinatarios, asuntos y cuerpos de los mensajes. Es ampliamente utilizada para implementar funcionalidades como confirmación de cuentas, recuperación de contraseñas y notificaciones automáticas en aplicaciones web.
 
+## JWT
+
+- Se utilizará **JWT (JSON Web Token)**, una tecnología para la autenticación y autorización segura de usuarios en aplicaciones web. JWT permite generar tokens firmados que se envían al cliente tras el inicio de sesión y se utilizan para acceder a rutas protegidas sin necesidad de almacenar sesiones en el servidor.
+- Se instala con `npm install jsonwebtoken`.
+- JWT es ampliamente utilizado para proteger rutas privadas, validar la identidad del usuario y mantener la seguridad en la comunicación entre el frontend y el backend.
+
 ## Recomendaciones adicionales
 
 - Configura variables de entorno para almacenar credenciales sensibles y la URL de conexión a la base de datos.
