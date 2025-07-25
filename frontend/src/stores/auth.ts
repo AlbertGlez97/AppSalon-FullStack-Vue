@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
   const register = async (userData: User): Promise<toastMessage> => {
     try {
       const { data } = await AuthApi.register(userData)
+
       return {
         message: data.msg || 'Usuario registrado correctamente, verifica tu correo electrónico',
         type: 'success',

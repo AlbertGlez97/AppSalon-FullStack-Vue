@@ -8,6 +8,7 @@ Este proyecto corresponde al backend de AppSalon, desarrollado con Node.js y Exp
 - Se instaló **Express** con `npm install express`, el framework utilizado para construir la API RESTful.
 - Se instaló **dotenv** con `npm install dotenv` para gestionar variables de entorno. Esta biblioteca permite cargar variables definidas en un archivo `.env` al entorno de Node.js, facilitando la configuración de credenciales sensibles y parámetros de la aplicación sin exponerlos directamente en el código fuente.
 - Se instaló **colors** con `npm install colors`, una biblioteca que permite agregar estilos y colores a los mensajes mostrados en la consola, facilitando la visualización de logs y errores durante el desarrollo.
+- Se instaló **date-fns** con `npm install date-fns`, una biblioteca para el manejo y manipulación de fechas en JavaScript. Date-fns proporciona funciones útiles para formatear, comparar, calcular intervalos y realizar operaciones con fechas de manera sencilla y eficiente, facilitando el trabajo con fechas en el backend sin depender de objetos Date nativos.
 
 ## Estructura del proyecto
 

@@ -3,13 +3,22 @@
 Este proyecto se inició con `npm init vue@latest`, configurando las siguientes tecnologías y herramientas:
 
 - **TypeScript**: Permite escribir código más seguro y mantenible gracias a la tipificación estática.
+
 - **Vue Router**: Facilita la navegación entre páginas y la gestión de rutas en la aplicación.
+
 - **Pinia**: Proporciona un sistema de gestión de estado centralizado y eficiente para Vue.
+
 - **TailwindCSS**: Framework de utilidades para estilos rápidos y personalizables en la interfaz.
+
 - **daisyui**: Permite agregar componentes UI pre-diseñados y personalizables sobre TailwindCSS, acelerando el desarrollo de interfaces atractivas.
+
 - **Vue3 Datepicker**: Se instaló [Vue3 Datepicker](https://vue3datepicker.com/props/modes-configuration/), un componente de selección de fechas flexible y personalizable para Vue 3. Permite a los usuarios elegir fechas o rangos de fechas de manera sencilla, soportando diferentes modos de selección y configuraciones para adaptarse a diversas necesidades en formularios o interfaces donde se requiera ingresar fechas.
+
 - **FormKit**: Se instalaron los paquetes `@formkit/vue` y `@formkit/themes` mediante `npm i @formkit/vue @formkit/themes`. FormKit es una librería para la creación de formularios en Vue, que facilita la generación de formularios complejos, validaciones y manejo de estados de manera eficiente y declarativa. Además, permite aplicar temas visuales fácilmente para personalizar la apariencia de los formularios.
+
 - **vue-toast-notification**: Se instaló mediante `npm i vue-toast-notification`. Esta librería permite mostrar notificaciones tipo "toast" (mensajes emergentes y temporales) en la interfaz de usuario. Es útil para informar al usuario sobre acciones exitosas, advertencias, errores u otra información relevante de manera visual y no intrusiva. Su integración es sencilla y personalizable, facilitando la mejora de la experiencia de usuario en la aplicación.
+
+- **date-fns**: Se instaló mediante `npm i date-fns`. Esta librería proporciona funciones utilitarias para el manejo y manipulación de fechas en JavaScript. Permite formatear, comparar, calcular intervalos y realizar operaciones complejas con fechas de manera sencilla y eficiente, facilitando el trabajo con fechas en el frontend sin depender de objetos Date nativos o librerías más pesadas.
 
 Estas herramientas mejoran la estructura, escalabilidad y experiencia de desarrollo en el frontend.
 

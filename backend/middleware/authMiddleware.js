@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken'; // Importar la librería jsonwebtoken
 import User from '../models/User.js'; // Importar el modelo de usuario
 
 const authMiddleware = async (req , res, next ) => {
-    if(!req.headers.authorization && !req.headers.authorization.startsWith('Bearer ')) {
+
+    if(!req.headers.authorization) {
         const error = new Error("Token no válido o inexistente");
         return res.status(403).json({
             msg: error.message,

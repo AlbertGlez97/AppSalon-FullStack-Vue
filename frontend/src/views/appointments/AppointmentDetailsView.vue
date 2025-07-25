@@ -55,7 +55,7 @@ watch(selectedDate, (newDate) => {
     <p class="text-right text-white text-2xl">
       Total a pagar:
       <span class="font-bold">
-        {{ formatCurrency(storeAppointments.totalAmout) }}
+        {{ formatCurrency(storeAppointments.totalAmount) }}
       </span>
     </p>
   </div>
@@ -75,13 +75,20 @@ watch(selectedDate, (newDate) => {
           :disabled-week-days="[0]"
         />
       </div>
-      <div class="flex-1 grid grid-cols-1 xl:grid-cols-2 gap-3 mt-10 lg:mt-0">
+      <div
+        v-if="storeAppointments.isDateSelected"
+        class="flex-1 grid grid-cols-1 xl:grid-cols-2 gap-3 mt-10 lg:mt-0"
+      >
         <button
           v-for="hour in storeAppointments.hours"
           :key="hour"
-          class="block text-blue-500 rounded-lg text-xl font-black p-2"
-          :class="storeAppointments.time === hour ? 'bg-blue-500 text-white' : 'bg-white'"
+          class="block text-blue-500 rounded-lg text-xl font-black p-2 disabled:opacity-10"
+          :class="[
+            storeAppointments.time === hour ? 'bg-blue-500 text-white' : 'bg-white',
+            storeAppointments.disableTime(hour) ? 'cursor-not-allowed' : 'cursor-pointer',
+          ]"
           @click="storeAppointments.time = hour"
+          :disabled="storeAppointments.disableTime(hour)"
         >
           {{ hour }}
         </button>
@@ -89,8 +96,10 @@ watch(selectedDate, (newDate) => {
     </div>
 
     <div v-if="storeAppointments.isValidReservation" class="flex justify-end">
-      <button class="w-full md:w-auto bg-blue-500 p-3 rounded-lg uppercase font-black text-white cursor-pointer"
-        @click="storeAppointments.createAppointment">
+      <button
+        class="w-full md:w-auto bg-blue-500 p-3 rounded-lg uppercase font-black text-white cursor-pointer"
+        @click="storeAppointments.createAppointment"
+      >
         CONFIRMAR RESERVACIÓN
       </button>
     </div>

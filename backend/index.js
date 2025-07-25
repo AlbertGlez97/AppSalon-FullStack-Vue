@@ -7,8 +7,9 @@ import colors from "colors";
 import cors from "cors"; // Importar cors para manejar solicitudes de diferentes orígenes
 // Importar la función de conexión a la base de datos
 import { connectDB } from "./config/db.js";
-import servicesRoute from "./routes/servicesRoute.js"; // Importar la ruta de servicios
+import servicesRoutes from "./routes/servicesRoutes.js"; // Importar la ruta de servicios
 import authRoutes from "./routes/authRoutes.js"; // Importar las rutas de autenticación
+import appointmentsRoutes from "./routes/appointmentRoutes.js"; // Importar las rutas de citas
 
 // Cargar las variables de entorno desde el archivo .env
 dotenv.config();
@@ -41,8 +42,6 @@ const whitelist = [process.env.FRONTEND_URL, process.env.FRONTEND_URL_JWT]; // L
 const corsOptions = {
   origin: function (origin, callback) {
 
-    console.log("Origen de la solicitud:", origin); // Registrar el origen de la solicitud
-
     if (whitelist.includes(origin) || !origin) {
       callback(null, true); // Permitir el origen si está en la lista blanca o si no hay origen (por ejemplo, solicitudes desde Postman)
     } else {
@@ -59,9 +58,11 @@ app.use(cors(corsOptions)); // Middleware para permitir solicitudes desde difere
 // para tareas como autenticación, manejo de errores, parseo de datos, y definición de rutas.
 // El siguiente middleware registra el módulo 'servicesRoute' para manejar todas las solicitudes que comiencen con '/api/services'.
 // Esto permite organizar las rutas relacionadas con servicios en un archivo separado, facilitando la escalabilidad y el mantenimiento del código.
-app.use("/api/services", servicesRoute);
+app.use("/api/services", servicesRoutes);
 
 app.use("/api/auth", authRoutes); // Registrar las rutas de autenticación
+
+app.use('/api/appointments', appointmentsRoutes); // Registrar las rutas de citas
 
 // Definir el puerto
 const PORT = process.env.PORT || 4000;
