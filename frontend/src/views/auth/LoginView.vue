@@ -25,7 +25,7 @@ const handleSubmit = async ({
 
     // Redirigir al usuario a la vista de citas después de iniciar sesión
     if (type === 'success') {
-      router.push({ name: 'my-appointments' })
+      router.push({ name: 'user-appointments' })
     }
   } catch (error) {
     if ($toast) {

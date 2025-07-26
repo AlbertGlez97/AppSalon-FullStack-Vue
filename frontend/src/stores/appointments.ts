@@ -88,7 +88,7 @@ export const useAppointmentsStore = defineStore('appointments', () => {
         }
 
         // Redirigir a la página de citas del usuario
-        await router.push({ name: 'my-appointments' })
+        await router.push({ name: 'user-appointments' })
 
         // Limpiar los campos después de crear la cita
         clearAppointmentData()

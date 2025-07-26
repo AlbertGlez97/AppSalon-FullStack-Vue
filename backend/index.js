@@ -10,6 +10,7 @@ import { connectDB } from "./config/db.js";
 import servicesRoutes from "./routes/servicesRoutes.js"; // Importar la ruta de servicios
 import authRoutes from "./routes/authRoutes.js"; // Importar las rutas de autenticación
 import appointmentsRoutes from "./routes/appointmentRoutes.js"; // Importar las rutas de citas
+import userRoutes from "./routes/userRoutes.js"; // Importar las rutas de usuario
 
 // Cargar las variables de entorno desde el archivo .env
 dotenv.config();
@@ -63,6 +64,8 @@ app.use("/api/services", servicesRoutes);
 app.use("/api/auth", authRoutes); // Registrar las rutas de autenticación
 
 app.use('/api/appointments', appointmentsRoutes); // Registrar las rutas de citas
+
+app.use("/api/user", userRoutes); // Registrar las rutas de usuario
 
 // Definir el puerto
 const PORT = process.env.PORT || 4000;

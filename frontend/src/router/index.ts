@@ -20,9 +20,20 @@ const router = createRouter({
       },
       children: [
         {
-          path: '',
-          name: 'my-appointments',
-          component: () => import('../views/appointments/MyAppointmentsView.vue'),
+          path: 'my-appointments',
+          component: () => import('../views/appointments/MyAppointmentsLayout.vue'),
+          children: [
+            {
+              path: '',
+              name: 'user-appointments',
+              component: () => import('../views/appointments/UserAppointmentsView.vue'),
+            },
+            {
+              path: 'pasadas',
+              name: 'user-past-appointments',
+              component: () => import('../views/appointments/UserPastAppointmentsView.vue'),
+            },
+          ],
         },
         {
           path: 'nueva',

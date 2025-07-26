@@ -7,5 +7,11 @@ export default {
     },
     getByDate(date: string) {
         return api.get(`/appointments?date=${date}`);         
+    },
+    getUserAppointments(userId: string) {
+        return api.get(`/user/${userId}/appointments`);
+    },
+    getUserPastAppointments(userId: string) {
+        return api.get(`/user/${userId}/appointments/past`);
     }
 }

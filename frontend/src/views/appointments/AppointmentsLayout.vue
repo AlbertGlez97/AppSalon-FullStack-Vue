@@ -24,7 +24,7 @@ const userStore = useUserStore();
 
       <nav class="flex gap-2 items-center justify-end">
         <RouterLink
-          :to="{ name: 'my-appointments' }"
+          :to="{ name: 'user-appointments' }"
           class="p-3 text-gray-200 uppercase text-xs font-black rounded-lg"
           >Mis citas</RouterLink
         >
