@@ -1,5 +1,5 @@
 interface AppointmentByDate {
-    id: string;
+    _id: string;
     time: string;
 }
 

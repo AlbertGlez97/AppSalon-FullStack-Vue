@@ -1,13 +1,18 @@
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import AuthApi from '@/api/AuthApi'
 import AppointmentAPI from '@/api/AppointmentAPI'
 import type { User } from '@/interface/User.ts'
 import type { UserAppointment } from '@/interface/UserAppointment.ts'
+import type { Toast } from '@/interface/Toast'
 
 export const useUserStore = defineStore('user', () => {
+  // Inyectamos el objeto $toast para mostrar notificaciones
+  const $toast = inject<Toast>('$toast')
+  // Usamos useRouter para redirigir al usuario después de cerrar sesión
   const router = useRouter()
+
   const user = ref<User>()
   const userAppointments = ref<UserAppointment[]>([])
   const userPastAppointments = ref<UserAppointment[]>([])
@@ -18,16 +23,35 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await AuthApi.auth()
       user.value = data
     } catch (error) {
-      console.error(error)
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: { msg?: string } } }
+        if ($toast) {
+          $toast.open({
+            message: err.response?.data?.msg || 'Error al obtener el usuario',
+            type: 'error',
+          })
+        }
+      }
     }
   }
 
   async function getUserAppointments() {
+
+    if (!user.value?._id) return
+
     try {
-      const { data } = await AppointmentAPI.getUserAppointments(user.value?._id || '')
+      const { data } = await AppointmentAPI.getUserAppointments(user.value?._id)
       userAppointments.value = data
     } catch (error) {
-      console.error(error)
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: { msg?: string } } }
+        if ($toast) {
+          $toast.open({
+            message: err.response?.data?.msg || 'Error al obtener las citas del usuario',
+            type: 'error',
+          })
+        }
+      }
     } finally {
       loading.value = false
     }
@@ -38,7 +62,15 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await AppointmentAPI.getUserPastAppointments(user.value?._id || '')
       userPastAppointments.value = data
     } catch (error) {
-      console.error(error)
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: { msg?: string } } }
+        if ($toast) {
+          $toast.open({
+            message: err.response?.data?.msg || 'Error al obtener las citas pasadas del usuario',
+            type: 'error',
+          })
+        }
+      }
     } finally {
       loading.value = false
     }

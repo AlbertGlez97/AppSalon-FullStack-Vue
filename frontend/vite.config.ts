@@ -15,4 +15,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    hmr: {
+      overlay: true, // muestra errores en pantalla
+    },
+    watch: {
+      usePolling: true, // 👈 Forzar Vite a observar cambios
+    }
+  },
 })

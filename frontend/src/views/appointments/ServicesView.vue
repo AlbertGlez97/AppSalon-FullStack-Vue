@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import ServiceItem from '@/components/ServiceItem.vue';
 import type { Service } from '@/interface/Service.ts';
-import { useServicesStore } from '../../stores/services';
+import { useServicesStore } from '@/stores/services';
+import { useAppointmentsStore } from '@/stores/appointments';
 
-const store = useServicesStore() as { services: Service[] };
+const serviceStore = useServicesStore() as { services: Service[] };
+const appointmentsStore = useAppointmentsStore();
 </script>
 
 <template>
-    <h2 class="text-4xl font-extrabold text-white mt-10">Servicios</h2>
+    <h2 class="text-4xl font-extrabold text-white mt-10">{{appointmentsStore.appointmentId ? 'Editar Servicios' : 'Agrega Servicios'}}</h2>
     <p class="text-white text-lg mt-5">A continuacion elige al menos un servicio para tu cita, un maximo de dos
         servicios</p>
 
     <div class="grid grid-cols-2 gap-5 mt-5">
-        <ServiceItem v-for="service in store.services" :key="service._id" :service="service" />
+        <ServiceItem v-for="service in serviceStore.services" :key="service._id" :service="service" />
     </div>
 </template>

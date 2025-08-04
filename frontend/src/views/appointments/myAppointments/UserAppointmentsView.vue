@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import Appointment from '@/components/Appointment.vue'
 
 const userStore = useUserStore()
+
+onMounted(async () => {
+  await userStore.getUserAppointments()
+})
 
 </script>
 
@@ -16,10 +21,11 @@ const userStore = useUserStore()
     <p v-if="userStore.noAppointments" class="text-white text-2xl text-center mt-5">No tienes citas próximas</p>
 
     <div v-else class="grid grid-cols-1 gap-5 mt-10">
-      <Appointment 
+      <Appointment
         v-for="appointment in userStore.userAppointments"
         :key="appointment._id"
         :appointment="appointment"
+        :isPastAppointment="false"
         />
     </div>
 

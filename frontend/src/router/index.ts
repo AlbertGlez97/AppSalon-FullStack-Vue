@@ -21,17 +21,17 @@ const router = createRouter({
       children: [
         {
           path: 'my-appointments',
-          component: () => import('../views/appointments/MyAppointmentsLayout.vue'),
+          component: () => import('../views/appointments/myAppointments/MyAppointmentsLayout.vue'),
           children: [
             {
               path: '',
               name: 'user-appointments',
-              component: () => import('../views/appointments/UserAppointmentsView.vue'),
+              component: () => import('../views/appointments/myAppointments/UserAppointmentsView.vue'),
             },
             {
               path: 'pasadas',
               name: 'user-past-appointments',
-              component: () => import('../views/appointments/UserPastAppointmentsView.vue'),
+              component: () => import('../views/appointments/myAppointments/UserPastAppointmentsView.vue'),
             },
           ],
         },
@@ -51,6 +51,22 @@ const router = createRouter({
             },
           ],
         },
+        {
+          path: ':id/editar',
+          component: () => import('../views/appointments/editAppointments/EditAppointmentLayout.vue'),
+          children: [
+            {
+              path: '',
+              name: 'edit-appointment',
+              component: () => import('../views/appointments/ServicesView.vue'),
+            },
+             {
+              path: 'detalles',
+              name: 'edit-appointment-details',
+              component: () => import('../views/appointments/AppointmentDetailsView.vue'),
+            },
+          ],
+        },
       ],
     },
     {
@@ -58,7 +74,7 @@ const router = createRouter({
       name: 'auth',
       component: () => import('../views/auth/AuthLayout.vue'),
       children: [
-        { 
+        {
           path: 'registro',
           name: 'register',
           component: () => import('../views/auth/RegisterView.vue'),
@@ -72,6 +88,16 @@ const router = createRouter({
           path: 'login',
           name: 'login',
           component: () => import('../views/auth/LoginView.vue'),
+        },
+        {
+          path: 'olvide-password',
+          name: 'forgot-password',
+          component: () => import('../views/auth/ForgotPasswordView.vue'),
+        },
+        {
+          path: 'olvide-password/:token',
+          name: 'new-password',
+          component: () => import('../views/auth/NewPasswordView.vue'),
         }
       ],
     }
@@ -101,6 +127,6 @@ router.beforeEach(async (to, from, next) => {
     // Si la ruta no requiere autenticación, continuar normalmente
     next()
   }
-})  
+})
 
 export default router

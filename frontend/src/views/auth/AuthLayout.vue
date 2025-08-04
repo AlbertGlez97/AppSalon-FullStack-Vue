@@ -1,7 +1,13 @@
 <script setup lang="ts">
+
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
+
 const authRoutes = [
   { name: 'register', text: 'Crear una Cuenta' },
   { name: 'login', text: 'Iniciar Sesión' },
+  { name: 'forgot-password', text: 'Olvide mi password' },
 ]
 </script>
 
@@ -16,6 +22,7 @@ const authRoutes = [
         v-for="authRoute in authRoutes"
         :to="{ name: authRoute.name }"
         class="uppercase font-bold text-white"
+        :class="{'hidden' : route.name === authRoute.name}"
       >
         {{ authRoute.text }}
       </RouterLink>

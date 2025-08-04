@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 
-const userStore = useUserStore()
 const route = useRoute()
+const userStore = useUserStore()
 
-onMounted(() => {
-  userStore.getUser()
+onMounted(async () => {
+  await userStore.getUser()
 })
 </script>
 
@@ -19,7 +19,6 @@ onMounted(() => {
       :class="
         route.name === 'user-appointments' ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'
       "
-      @click.native="userStore.getUserAppointments"
     >
       Citas</RouterLink
     >
@@ -31,7 +30,6 @@ onMounted(() => {
           ? 'bg-blue-500 text-white'
           : 'bg-white text-blue-500'
       "
-      @click.native="userStore.getUserPastAppointments"
     >
       Citas Pasadas</RouterLink
     >

@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 // Validar un object ID
 function isValidObjectId(id, res) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    const error = new Error("El ID del servicio no es válido");
+    const error = new Error("El ID no es válido");
     return res.status(400).json({
       msg: error.message,
     });
@@ -46,6 +48,11 @@ function isUserExists(user, res) {
   }
 }
 
+// Formatear la fecha
+function formatDate(date) {
+    return format(date, 'PPPP', {locale: es})
+}
+
 // Generar un ID único
 // Esta función genera un ID único basado en la fecha actual y un número aleatorio
 const uniqueId = () =>
@@ -58,12 +65,38 @@ const generateJWT = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
+// Función para limpiar tokens expirados manualmente
+const cleanupExpiredTokens = async () => {
+  try {
+    const User = (await import('../models/User.js')).default;
+    const result = await User.updateMany(
+      { 
+        tokenExpires: { $lt: new Date() },
+        token: { $ne: null }
+      },
+      { 
+        $set: { 
+          token: null,
+          tokenExpires: null 
+        } 
+      }
+    );
+    console.log(`Tokens expirados limpiados: ${result.modifiedCount}`);
+    return result.modifiedCount;
+  } catch (error) {
+    console.error('Error limpiando tokens expirados:', error);
+    return 0;
+  }
+};
+
 export {
   isValidObjectId,
   isServiceExists,
   validateFields,
   isEmptyObject,
   isUserExists,
+  formatDate,
   uniqueId,
   generateJWT,
+  cleanupExpiredTokens,
 };

@@ -10,7 +10,11 @@
     "start": "node index.js",
     "dev": "node --watch index.js",
     "seed:import": "node data/seed.js --import",
-    "seed:clear": "node data/seed.js --clear"
+    "seed:clear": "node data/seed.js --clear",
+    "cleanup:tokens": "node scripts/cleanupTokens.js",
+    "setup:ttl": "node scripts/setupTTL.js",
+    "test:ttl": "node scripts/testTTL.js",
+    "check:tokens": "node scripts/checkTokens.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

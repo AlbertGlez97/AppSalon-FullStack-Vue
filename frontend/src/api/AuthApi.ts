@@ -1,3 +1,4 @@
+import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue'
 import api from '../lib/axios'
 import type { User } from '@/interface/User'
 
@@ -14,4 +15,13 @@ export default {
   auth() {
     return api.get('/auth/user')
   },
+  forgotPassword(data: {}) {
+    return api.post('/auth/forgot-password', data)
+  },
+  verifyPasswordResetToken(token: string) {
+    return api.get(`/auth/forgot-password/${token}`)
+  },
+  updatePassword(token: string,data: {}){
+    return api.post(`/auth/forgot-password/${token}`, data)
+  }
 }

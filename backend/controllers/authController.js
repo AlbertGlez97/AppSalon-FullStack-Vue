@@ -4,8 +4,12 @@ import {
   isEmptyObject,
   isUserExists,
   generateJWT,
+  uniqueId,
 } from "../utils/index.js";
-import { sendEmailVerification } from "../emails/authEmailService.js";
+import {
+  sendEmailVerification,
+  sendEmailPasswordReset,
+} from "../emails/authEmailService.js";
 
 const register = async (req, res) => {
   // Verificar si el cuerpo de la solicitud está vacío
@@ -68,6 +72,7 @@ const verifyAccount = async (req, res) => {
   // Si el token es válido, actualizar el estado del usuario a verificado
   try {
     user.token = null; // Limpiar el token de verificación
+    user.tokenExpires = null; // Limpiar la fecha de expiración
     user.verified = true; // Marcar al usuario como verificado
     await user.save(); // Guardar los cambios en la base de datos
 
@@ -125,13 +130,100 @@ const login = async (req, res) => {
 };
 
 /****************************************************************************************************************/
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  //Validar si existe el usuario
+  const user = await User.findOne({ email });
+  // Si no se encuentra el usuario, devolver un error
+  if (!user) {
+    const error = new Error("Usuario no encontrado");
+    return res.status(404).json({
+      msg: error.message,
+    });
+  }
+
+  try {
+    user.token = uniqueId();
+    const result = await user.save();
+
+    await sendEmailPasswordReset({
+      name: result.name,
+      email: result.email,
+      token: result.token,
+    });
+
+    res.status(200).json({
+      msg: "Hemos enviado un email con las instrucciones",
+    });
+  } catch (error) {
+    console.error("Error al enviar el email con las instrucciones:", error);
+    res.status(500).json({
+      msg: "Error al enviar el email con las instrucciones",
+      error: error.message,
+    });
+  }
+};
+
+/****************************************************************************************************************/
+const veryPasswordResetToken = async (req, res) => {
+  const { token } = req.params;
+
+  const isValidToken = await User.findOne({ token });
+  if (!isValidToken) {
+    const error = new Error("Token no válido");
+    return res.status(401).json({
+      msg: error.message,
+    });
+  }
+
+  res.status(200).json({ msg: "Token válido" });
+};
+
+/****************************************************************************************************************/
+const updatePassword = async (req, res) => {
+  const { token } = req.params;
+
+  const user = await User.findOne({ token });
+  if (!user) {
+    const error = new Error("Token no válido");
+    return res.status(401).json({
+      msg: error.message,
+    });
+  }
+
+  const { password } = req.body;
+
+  try {
+    user.token = null; // Limpiar el token
+    user.tokenExpires = null; // Limpiar la fecha de expiración
+    user.password = password;
+    await user.save();
+
+    res.status(200).json({ msg: "Password modificado correctamente" });
+  } catch (error) {
+    console.error("Error al cambiar el password:", error);
+    res.status(500).json({
+      msg: "Error al cambiar el password",
+      error: error.message,
+    });
+  }
+};
+
+/****************************************************************************************************************/
 const user = (req, res) => {
   // Obtener el usuario del request (debería estar agregado por el middleware de autenticación
   const { user } = req;
   // Devolver el usuario
-  res.status(200).json(
-    user
-  );
-}
+  res.status(200).json(user);
+};
 
-export { register, verifyAccount, login,user };
+export {
+  register,
+  verifyAccount,
+  login,
+  forgotPassword,
+  veryPasswordResetToken,
+  updatePassword,
+  user,
+};

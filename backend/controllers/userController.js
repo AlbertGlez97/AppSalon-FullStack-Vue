@@ -13,7 +13,9 @@ const getUserCurrentAppointments = async (req, res) => {
     const appointments = await Appointment.find({
       user,
       date: { $gte: startOfDay(new Date()) },
-    }).populate("services"); // Buscar citas del usuario con fecha mayor o igual a la fecha actual , populate sirve para incluir los detalles de los servicios relacionados con la cita
+    })
+      .populate("services")
+      .sort({ date: "asc", time: "asc" }); // Buscar citas del usuario con fecha mayor o igual a la fecha actual , populate sirve para incluir los detalles de los servicios relacionados con la cita
 
     if (!appointments.length) {
       const error = new Error("No se encontraron citas para este usuario");
@@ -40,7 +42,9 @@ const getUserPastAppointments = async (req, res) => {
     const appointments = await Appointment.find({
       user,
       date: { $lt: startOfDay(new Date()) },
-    }).populate("services"); // Buscar citas del usuario con fecha anterior a la fecha actual , populate sirve para incluir los detalles de los servicios relacionados con la cita
+    })
+      .populate("services")
+      .sort({ date: "desc", time: "desc" }); // Buscar citas del usuario con fecha anterior a la fecha actual , populate sirve para incluir los detalles de los servicios relacionados con la cita
 
     if (!appointments.length) {
       const error = new Error(

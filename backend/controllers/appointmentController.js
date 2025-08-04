@@ -1,5 +1,11 @@
 import { parse, formatISO, startOfDay, endOfDay, isValid } from "date-fns";
 import Appointment from "../models/Appointment.js";
+import {
+  sendEmailNewAppointment,
+  sendEmailUpdateAppointment,
+  sendEmailDeleteAppointment,
+} from "../emails/appointmentEmailService.js";
+import { isValidObjectId, formatDate } from "../utils/index.js";
 
 const createAppointment = async (req, res) => {
   try {
@@ -12,12 +18,18 @@ const createAppointment = async (req, res) => {
       user: req.user.id,
     });
 
-    await appointment.save();
+    const result = await appointment.save();
+
+    await sendEmailNewAppointment({
+      date: formatDate(result.date),
+      time: result.time,
+    });
+
     res.status(201).json({ message: "Cita Almacena Correctamente" });
   } catch (error) {
     res
       .status(500)
-      .json({ error: "Fallo al Almacenar la Cita", details: error.message });
+      .json({ msg: "Fallo al Almacenar la Cita", details: error.message });
   }
 };
 
@@ -27,7 +39,7 @@ const getAppointmentsByDate = async (req, res) => {
     const { date } = req.query;
     // Si no se proporciona una fecha, responde con error 400
     if (!date) {
-      return res.status(400).json({ error: "Fecha es requerida" });
+      return res.status(400).json({ msg: "Fecha es requerida" });
     }
 
     // Convierte el string de fecha recibido a un objeto Date usando el formato dd/MM/yyyy
@@ -35,7 +47,7 @@ const getAppointmentsByDate = async (req, res) => {
 
     // Verifica si la fecha convertida es válida
     if (!isValid(parsedDate)) {
-      return res.status(400).json({ error: "Fecha inválida" });
+      return res.status(400).json({ msg: "Fecha inválida" });
     }
 
     // Formatea la fecha a una cadena ISO para mantener consistencia
@@ -45,7 +57,7 @@ const getAppointmentsByDate = async (req, res) => {
     const appointments = await Appointment.find({
       date: {
         $gte: startOfDay(new Date(isoDate)), // Desde el inicio del día
-        $lte: endOfDay(new Date(isoDate)),   // Hasta el final del día
+        $lte: endOfDay(new Date(isoDate)), // Hasta el final del día
       },
     }).select("time"); // Solo selecciona el campo 'time' de cada cita
 
@@ -55,8 +67,112 @@ const getAppointmentsByDate = async (req, res) => {
     // Si ocurre un error, responde con código 500 y detalles del error
     res
       .status(500)
-      .json({ error: "Fallo al Obtener las Citas", details: error.message });
+      .json({ msg: "Fallo al Obtener las Citas", details: error.message });
   }
 };
 
-export { createAppointment, getAppointmentsByDate };
+const getAppointmentById = async (req, res) => {
+  const { id } = req.params;
+
+  // Validar por object id
+  if (isValidObjectId(id, res)) return;
+
+  // Validar que exista
+  const appointment = await Appointment.findById(id).populate("services");
+  if (!appointment) return res.status(404).json({ msg: "Cita no encontrada" });
+
+  if (
+    req?.user?._id.toString() &&
+    appointment.user.toString() !== req.user._id.toString()
+  ) {
+    const error = new Error("No tienes permiso para realizar esta acción");
+    return res.status(403).json({ msg: error.message });
+  }
+
+  //Retornar la cita
+  res.status(200).json(appointment);
+};
+
+const updateAppointment = async (req, res) => {
+  const { id } = req.params;
+
+  // Validar por object id
+  if (isValidObjectId(id, res)) return;
+
+  // Validar que exista
+  const appointment = await Appointment.findById(id).populate("services");
+  if (!appointment) return res.status(404).json({ msg: "Cita no encontrada" });
+
+  if (
+    req?.user?._id.toString() &&
+    appointment.user.toString() !== req.user._id.toString()
+  ) {
+    const error = new Error("No tienes permiso para realizar esta acción");
+    return res.status(403).json({ msg: error.message });
+  }
+
+  // Actualizar
+  const { date, time, totalAmount, services } = req.body;
+  appointment.date = date;
+  appointment.time = time;
+  appointment.totalAmount = totalAmount;
+  appointment.services = services;
+
+  try {
+    const result = await appointment.save();
+
+    await sendEmailUpdateAppointment({
+      date: formatDate(result.date),
+      time: result.time,
+    });
+
+    res.status(200).json({ msg: "Cita Actualizada Correctamente" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error al actualizar la cita", details: error.message });
+  }
+};
+
+const deleteAppointment = async (req, res) => {
+  const { id } = req.params;
+
+  // Validar por object id
+  if (isValidObjectId(id, res)) return;
+
+  // Validar que exista
+  const appointment = await Appointment.findById(id).populate("services");
+  if (!appointment) return res.status(404).json({ msg: "Cita no encontrada" });
+
+  if (
+    req?.user?._id.toString() &&
+    appointment.user.toString() !== req.user._id.toString()
+  ) {
+    const error = new Error("No tienes permiso para realizar esta acción");
+    return res.status(403).json({ msg: error.message });
+  }
+
+  // Eliminar
+  try {
+    const result = await appointment.deleteOne();
+
+    await sendEmailDeleteAppointment({
+      date: formatDate(appointment.date),
+      time: appointment?.time || "",
+    });
+
+    res.status(200).json({ msg: "Cita Cancelada Exitosamente" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error al cancelar la cita", details: error.message });
+  }
+};
+
+export {
+  createAppointment,
+  getAppointmentsByDate,
+  getAppointmentById,
+  updateAppointment,
+  deleteAppointment,
+};

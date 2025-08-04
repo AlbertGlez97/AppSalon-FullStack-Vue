@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: () => uniqueId(),
   },
+  tokenExpires: {
+    type: Date,
+  },
   verified: {
     type: Boolean,
     default: false,
@@ -33,6 +36,9 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
 });
+
+// Crear índice TTL explícito
+userSchema.index({ tokenExpires: 1 }, { expireAfterSeconds: 0 });
 
 // Middleware para encriptar la contraseña antes de guardar el usuario
 // Antes de guardar un documento de usuario, se ejecuta esta función middleware 'pre'.
@@ -50,6 +56,12 @@ userSchema.pre("save", async function (next) {
         // El resultado reemplaza la contraseña original en el documento.
         this.password = await bcrypt.hash(this.password, salt);
     }
+    
+    // Si se está generando un nuevo token, establecer la fecha de expiración
+    if (this.isModified("token") && this.token && !this.tokenExpires) {
+        this.tokenExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos desde ahora
+    }
+    
     // Llama a 'next()' para continuar con el proceso de guardado.
     next();
 });

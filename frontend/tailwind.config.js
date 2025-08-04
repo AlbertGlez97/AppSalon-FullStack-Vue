@@ -3,7 +3,7 @@ export default {
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
-    './formkit.config.js', // Asegúrate de incluir el archivo de configuración de FormKit
+    './formkit.config.ts', // Asegúrate de incluir el archivo de configuración de FormKit
   ],
   theme: {
     extend: {
@@ -12,7 +12,8 @@ export default {
       }
     },
   },
-   plugins: [
-    require('@tailwindcss/forms')      // añade estilos base a inputs
-  ],
+  // Removemos el plugin de forms por ahora para evitar conflictos con Tailwind v4
+  // plugins: [
+  //   require('@tailwindcss/forms')      // añade estilos base a inputs
+  // ],
 }

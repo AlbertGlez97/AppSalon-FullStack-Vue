@@ -1,39 +1,38 @@
 <script setup lang="ts">
 import { inject } from 'vue'
-import { onMounted } from 'vue';
-import { useRoute , useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
+import { onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import type { Toast } from '@/interface/Toast'
 
 // Inyectamos el objeto $toast para mostrar notificaciones
 const $toast = inject<Toast>('$toast')
 
-const authStore = useAuthStore();
-const route = useRoute();
-const router = useRouter();
+const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
 
-const {token} = route.params;
+const { token } = route.params as { token: string }
 
 onMounted(async () => {
-  
+  if (!token) return
+
   try {
-    const { message, type } = await authStore.verifyAccount(token as string);
+    const { message, type } = await authStore.verifyAccount(token);
     if ($toast) {
       $toast.open({ message: message, type: type })
     }
     // Si la verificación es exitosa, redirigimos al usuario a la página de inicio de sesión
     if (type === 'success') {
       // Redirigir al usuario a la página de inicio de sesión o donde sea apropiado
-      router.push({ name: 'login' });
+      router.push({ name: 'login' })
     }
-
   } catch (error) {
     if ($toast) {
       $toast.open({ message: error as string, type: 'error' })
     }
   }
-
-});
+})
 </script>
 
 <template>

@@ -9,7 +9,7 @@ import router from './router'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
-import {plugin , defaultConfig} from '@formkit/vue'
+import {plugin, defaultConfig} from '@formkit/vue'
 import config from '../formkit.config.ts'
 
 import { useToast } from 'vue-toast-notification'
@@ -28,7 +28,7 @@ const app = createApp(App)
 app.provide('$toast', $toast);
 
 app.use(createPinia())
-// Use the FormKit plugin with the default configuration
+// Use the FormKit plugin with the simplified configuration
 app.use(plugin, defaultConfig(config))
 app.use(router)
 
