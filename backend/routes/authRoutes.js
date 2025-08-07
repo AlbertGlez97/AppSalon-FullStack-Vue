@@ -7,6 +7,7 @@ import {
   veryPasswordResetToken,
   updatePassword,
   user,
+  admin,
 } from '../controllers/authController.js'; // Importar el controlador de autenticación
 import authMiddleware from '../middleware/authMiddleware.js'; // Importar el middleware de autenticación
 
@@ -26,5 +27,6 @@ router
 
 // Area Privada - Requiere un JWT válido
 router.get('/user', authMiddleware, user);
+router.get('/admin', authMiddleware, admin);
 
 export default router;

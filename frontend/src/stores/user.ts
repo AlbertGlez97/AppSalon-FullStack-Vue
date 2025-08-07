@@ -35,6 +35,46 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  async function getUserAdmin() {
+    try {
+      const { data } = await AuthApi.admin()
+      user.value = data
+    } catch (error) {
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: { msg?: string } } }
+        if ($toast) {
+          $toast.open({
+            message: err.response?.data?.msg || 'Error al obtener el usuario administrador',
+            type: 'error',
+          })
+        }
+      }
+    }
+  }
+
+  async function getAdminAppointmentsPending() {
+    loading.value = true
+    if (!user.value?._id) return
+
+    try {
+      const { data } = await AppointmentAPI.getAdminAppointmentsPending(user.value?._id)
+      userAppointments.value = data
+    } catch (error) {
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: { msg?: string } } }
+        if ($toast) {
+          $toast.open({
+            message: err.response?.data?.msg || 'Error al obtener las citas del usuario administrador',
+            type: 'error',
+          })
+        }
+      }
+    } finally {
+      loading.value = false
+    }
+  }
+
+
   async function getUserAppointments() {
 
     if (!user.value?._id) return
@@ -100,6 +140,8 @@ export const useUserStore = defineStore('user', () => {
     userPastAppointments,
     loading,
     getUser,
+    getUserAdmin,
+    getAdminAppointmentsPending,
     getUserAppointments,
     getUserPastAppointments,
     logout,

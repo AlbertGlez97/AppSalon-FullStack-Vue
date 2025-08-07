@@ -8,6 +8,9 @@ export default {
   getByDate(date: string) {
     return api.get(`/appointments?date=${date}`)
   },
+  getAdminAppointmentsPending(userId: string) {
+    return api.get(`/user/${userId}/appointments/pending`)
+  },
   getUserAppointments(userId: string) {
     return api.get(`/user/${userId}/appointments`)
   },

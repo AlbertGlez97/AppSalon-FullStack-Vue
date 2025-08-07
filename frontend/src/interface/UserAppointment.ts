@@ -1,4 +1,5 @@
 import type { Service } from "./Service";
+import type { User } from "./User";
 
 interface UserAppointment {
   _id: string;
@@ -6,7 +7,7 @@ interface UserAppointment {
   date: Date;       
   time: string;       
   totalAmount: number;
-  user: string;      
+  user: User;      
 }
 
 export type { UserAppointment };

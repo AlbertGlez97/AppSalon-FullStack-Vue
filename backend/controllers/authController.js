@@ -218,6 +218,22 @@ const user = (req, res) => {
   res.status(200).json(user);
 };
 
+/****************************************************************************************************************/
+const admin = (req, res) => {
+  // Obtener el usuario del request (debería estar agregado por el middleware de autenticación
+  const { user } = req;
+
+  if (!user.admin) {
+    const error = new Error("No tienes permisos de administrador");
+    return res.status(401).json({
+      msg: error.message,
+    });
+  }
+
+  // Devolver el usuario
+  res.status(200).json(user);
+};
+
 export {
   register,
   verifyAccount,
@@ -226,4 +242,5 @@ export {
   veryPasswordResetToken,
   updatePassword,
   user,
+  admin,
 };

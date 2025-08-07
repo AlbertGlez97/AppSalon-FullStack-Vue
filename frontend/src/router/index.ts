@@ -12,6 +12,21 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/admin/AdminLayoutView.vue'),
+      meta: {
+        requiresAdmin: true, // Requiere ser administrador
+      },
+      children: [
+        {
+          path: '',
+          name: 'admin-appointments',
+          component: () => import('../views/admin/AppointmentsView.vue'),
+        },
+      ],
+    },
+    {
       path: '/reservaciones',
       name: 'appointments',
       component: AppointmentsLayout,
@@ -26,12 +41,14 @@ const router = createRouter({
             {
               path: '',
               name: 'user-appointments',
-              component: () => import('../views/appointments/myAppointments/UserAppointmentsView.vue'),
+              component: () =>
+                import('../views/appointments/myAppointments/UserAppointmentsView.vue'),
             },
             {
               path: 'pasadas',
               name: 'user-past-appointments',
-              component: () => import('../views/appointments/myAppointments/UserPastAppointmentsView.vue'),
+              component: () =>
+                import('../views/appointments/myAppointments/UserPastAppointmentsView.vue'),
             },
           ],
         },
@@ -44,7 +61,7 @@ const router = createRouter({
               name: 'new-appointment',
               component: () => import('../views/appointments/ServicesView.vue'),
             },
-             {
+            {
               path: 'detalles',
               name: 'appointment-details',
               component: () => import('../views/appointments/AppointmentDetailsView.vue'),
@@ -53,14 +70,15 @@ const router = createRouter({
         },
         {
           path: ':id/editar',
-          component: () => import('../views/appointments/editAppointments/EditAppointmentLayout.vue'),
+          component: () =>
+            import('../views/appointments/editAppointments/EditAppointmentLayout.vue'),
           children: [
             {
               path: '',
               name: 'edit-appointment',
               component: () => import('../views/appointments/ServicesView.vue'),
             },
-             {
+            {
               path: 'detalles',
               name: 'edit-appointment-details',
               component: () => import('../views/appointments/AppointmentDetailsView.vue'),
@@ -98,27 +116,54 @@ const router = createRouter({
           path: 'olvide-password/:token',
           name: 'new-password',
           component: () => import('../views/auth/NewPasswordView.vue'),
-        }
+        },
       ],
-    }
+    },
   ],
 })
 
 router.beforeEach(async (to, from, next) => {
   // Verificar si la ruta requiere autenticación
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
     // Verificar si el usuario tiene un token de autenticación
     const token = localStorage.getItem('token')
     if (!token) {
       // Redirigir al usuario a la página de inicio de sesión si no está autenticado
       next({ name: 'login' })
     } else {
-      try{
-        await AuthApi.auth()
-        // Si la autenticación es exitosa, continuar a la ruta solicitada
-        next()
-      }catch (error) {
+      try {
+        const { data } = await AuthApi.auth()
 
+        if (data.admin) {
+          next({ name: 'admin' })
+        } else {
+          // Si la autenticación es exitosa, continuar a la ruta solicitada
+          next()
+        }
+      } catch (error) {
+        // Si la autenticación falla, redirigir al usuario a la página de inicio de sesión
+        next({ name: 'login' })
+      }
+    }
+  } else {
+    // Si la ruta no requiere autenticación, continuar normalmente
+    next()
+  }
+})
+
+router.beforeEach(async (to, from, next) => {
+  // Verificar si la ruta requiere autenticación
+  if (to.matched.some((record) => record.meta.requiresAdmin)) {
+    // Verificar si el usuario tiene un token de autenticación
+    const token = localStorage.getItem('token')
+    if (!token) {
+      // Redirigir al usuario a la página de inicio de sesión si no está autenticado
+      next({ name: 'login' })
+    } else {
+      try {
+        await AuthApi.admin()
+        next()
+      } catch (error) {
         // Si la autenticación falla, redirigir al usuario a la página de inicio de sesión
         next({ name: 'login' })
       }

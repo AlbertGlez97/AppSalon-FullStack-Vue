@@ -43,6 +43,11 @@ Este proyecto corresponde al backend de AppSalon, desarrollado con Node.js y Exp
 - Se instala con `npm install jsonwebtoken`.
 - JWT es ampliamente utilizado para proteger rutas privadas, validar la identidad del usuario y mantener la seguridad en la comunicación entre el frontend y el backend.
 
+## Deploy Backen en fl0.com
+
+[fl0.com](https://fl0.com/) es una plataforma en la nube que permite desplegar aplicaciones backend y bases de datos de manera sencilla y rápida. Ofrece una interfaz intuitiva para gestionar el ciclo de vida de tus aplicaciones, facilitando el despliegue continuo, la escalabilidad y la integración con servicios como MongoDB, variables de entorno y pipelines de CI/CD. Es ideal para desarrolladores que buscan una solución de hosting moderna y sin complicaciones para sus proyectos Node.js y APIs RESTful.
+
+
 ## Recomendaciones adicionales
 
 - Configura variables de entorno para almacenar credenciales sensibles y la URL de conexión a la base de datos.
